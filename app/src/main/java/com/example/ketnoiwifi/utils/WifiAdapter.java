@@ -66,7 +66,7 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 ConnectWifi connectWifi = new ConnectWifi(context);
-                connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword());
+                connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword(),"WPA");
             }
         });
     }

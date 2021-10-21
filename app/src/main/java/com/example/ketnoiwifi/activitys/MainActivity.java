@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
         rcvListWifi = findViewById(R.id.rcv_main_listWifi);
         ArrayList<Wifi> wifis = new ArrayList<>();
-        wifis.add(new Wifi("TVNET_5G","TVNET@123",true));
-        wifis.add(new Wifi("TVNET_2.4G","TVNET@123",true));
+        wifis.add(new Wifi("TVNET-VNPT_5G","TVNET@123",true));
+        wifis.add(new Wifi("TVNET-VNPT_2.4G","TVNET@123",true));
         wifis.add(new Wifi("TVNET","TVNET@123",false));
         wifiAdapter = new WifiAdapter(wifis,this);
         rcvListWifi.setAdapter(wifiAdapter);
