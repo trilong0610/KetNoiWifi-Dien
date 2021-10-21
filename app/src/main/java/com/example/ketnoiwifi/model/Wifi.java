@@ -3,9 +3,9 @@ package com.example.ketnoiwifi.model;
 public class Wifi {
     private String ssid;
     private String password;
-    private String available;
+    private Boolean available;
 
-    public Wifi(String ssid, String password, String available) {
+    public Wifi(String ssid, String password, Boolean available) {
         this.ssid = ssid;
         this.password = password;
         this.available = available;
@@ -30,11 +30,11 @@ public class Wifi {
         this.password = password;
     }
 
-    public String getAvailable() {
+    public Boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(String available) {
+    public void setAvailable(Boolean available) {
         this.available = available;
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,17 +11,35 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="10dp">
+
+<!--        Icon Wifi-->
         <ImageView
+            android:id="@+id/iv_item_wifi_icon"
             android:src="@drawable/ic_baseline_wifi_24"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            app:tint="@color/black" />
+<!--        Name Wifi-->
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_item_wifi_name"
             android:text="TVNET_5GHZ"
             android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="10dp"/>
+<!--        Status pass-->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_item_wifi_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="San sang"
+            android:layout_marginRight="10dp"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
