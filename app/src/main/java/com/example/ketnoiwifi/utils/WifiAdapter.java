@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,15 +40,19 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
         Wifi wifi = Wifis.get(position);
 //        Set Name Wifi
         holder.tvName.setText(wifi.getSsid());
+
+        if (wifi.getAvailable())
+            holder.tvName.setTextColor(ContextCompat.getColor(context,R.color.blue));
+        else
+            holder.tvName.setTextColor(ContextCompat.getColor(context,R.color.black));
+
+
 //        Set Status Wifi
-        if (wifi.getAvailable()){
-            holder.tvStatus.setText("Sẵn sàng");
-            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.blue));
-        }
-        else {
-            holder.tvStatus.setText("");
-            holder.tvStatus.setTextColor(context.getResources().getColor(R.color.black));
-        }
+        if (wifi.getAvailable())
+            holder.tvStatus.setVisibility(View.VISIBLE);
+        else
+            holder.tvStatus.setVisibility(View.INVISIBLE);
+
 //        Set Color Icon Wifi
         if (wifi.getAvailable()) {
             holder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.blue),
@@ -57,7 +62,15 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             holder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.black),
                     android.graphics.PorterDuff.Mode.SRC_IN);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConnectWifi connectWifi = new ConnectWifi(context);
+                connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword());
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -74,7 +87,6 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             tvName = itemView.findViewById(R.id.tv_item_wifi_name);
             tvStatus = itemView.findViewById(R.id.tv_item_wifi_status);
             ivIcon = itemView.findViewById(R.id.iv_item_wifi_icon);
-
         }
     }
 }

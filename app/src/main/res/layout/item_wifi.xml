@@ -36,9 +36,13 @@
             android:id="@+id/tv_item_wifi_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="San sang"
+            android:text="Sẵn sàng kết nối"
             android:layout_marginRight="10dp"
-            android:textSize="10sp"/>
+            android:textSize="10sp"
+            android:textColor="@color/blue"
+            android:padding="8dp"
+            android:visibility="invisible"
+            android:background="@drawable/layout_bg"/>
 
     </LinearLayout>
 
