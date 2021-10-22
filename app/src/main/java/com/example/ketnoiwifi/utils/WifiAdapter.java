@@ -64,13 +64,19 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             holder.ivIcon.setColorFilter(ContextCompat.getColor(context, R.color.black),
                     android.graphics.PorterDuff.Mode.SRC_IN);
         }
+//        Connect to Wifi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ConnectWifi connectWifi = new ConnectWifi(context);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    connectWifi.connectWifiSus(wifi.getSsid(),wifi.getPassword());
-                }
+<<<<<<< Updated upstream
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+                    connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword());
+                else
+                    connectWifi.connectToWifi10(wifi.getSsid(),wifi.getPassword());
+=======
+                connectWifi.connectWiFi(wifi.getSsid(),wifi.getPassword(),"WPA");
+>>>>>>> Stashed changes
             }
         });
     }
