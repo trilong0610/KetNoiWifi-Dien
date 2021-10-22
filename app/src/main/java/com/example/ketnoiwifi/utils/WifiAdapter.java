@@ -1,6 +1,7 @@
 package com.example.ketnoiwifi.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,7 +68,9 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 ConnectWifi connectWifi = new ConnectWifi(context);
-                connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword(),"WPA");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    connectWifi.connectWifiSus(wifi.getSsid(),wifi.getPassword());
+                }
             }
         });
     }
