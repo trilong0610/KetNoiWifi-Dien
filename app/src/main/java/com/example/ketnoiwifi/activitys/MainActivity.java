@@ -22,9 +22,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.ketnoiwifi.R;
-import com.example.ketnoiwifi.model.Wifi;
 import com.example.ketnoiwifi.utils.ConnectWifi;
+import com.example.ketnoiwifi.utils.Wifi;
 import com.example.ketnoiwifi.utils.WifiAdapter;
+import com.thanosfisherman.wifiutils.WifiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Đang cập nhật Wifi, vui lòng chờ", Toast.LENGTH_SHORT).show();
             connectWifi.setFlagScan(true); //Cho phép cập nhật danh sách wifi
             connectWifi.scanWifi();
+
         }
     }
 

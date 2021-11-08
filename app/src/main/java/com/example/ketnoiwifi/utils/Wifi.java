@@ -1,4 +1,4 @@
-package com.example.ketnoiwifi.model;
+package com.example.ketnoiwifi.utils;
 
 public class Wifi {
     private String ssid;

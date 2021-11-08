@@ -34,7 +34,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
-import com.example.ketnoiwifi.model.Wifi;
+import com.example.ketnoiwifi.activitys.MainActivity;
+import com.example.ketnoiwifi.utils.Wifi;
+import com.thanosfisherman.wifiutils.WifiUtils;
+import com.thanosfisherman.wifiutils.wifiConnect.ConnectionErrorCode;
+import com.thanosfisherman.wifiutils.wifiConnect.ConnectionSuccessListener;
+import com.thanosfisherman.wifiutils.wifiRemove.RemoveErrorCode;
+import com.thanosfisherman.wifiutils.wifiRemove.RemoveSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +49,12 @@ public class ConnectWifi extends Application {
     private Context context;
     private String TAG = "Connect Wifi";
     private boolean flagScan = false; // Đánh dấu cho phép cập nhật danh sách wifi
+    private boolean flagBruceforce = true; // Đánh dấu cho phép cập nhật danh sách wifi
+
     ConnectivityManager.NetworkCallback networkCallback;
+
 //    WifiManager wifiManager = (WifiManager) context.getSystemService(context.WIFI_SERVICE);
+
     public ConnectWifi() {
     }
 
@@ -57,8 +67,7 @@ public class ConnectWifi extends Application {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void connectToWifi10(String ssid, String password)
-    {
+    public void connectToWifi10(String ssid, String password) {
         Log.e(TAG,"connection wifi  Q");
 
             WifiNetworkSpecifier wifiNetworkSpecifier = new WifiNetworkSpecifier.Builder()
@@ -101,8 +110,8 @@ public class ConnectWifi extends Application {
             mConnectivityManager.requestNetwork(networkRequest,networkCallback);
 
     }
-    public void connectToWifi(String ssid, String password)
-    {
+
+    public void connectToWifi(String ssid, String password) {
             try {
                 Log.e(TAG,"connection wifi pre Q");
                 WifiConfiguration wifiConfig = new WifiConfiguration();
@@ -117,7 +126,6 @@ public class ConnectWifi extends Application {
                 e.printStackTrace();
             }
         }
-
 
     public void scanWifi(){
         BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
@@ -173,6 +181,61 @@ public class ConnectWifi extends Application {
         }
     }
 
+    public String checkSSIDAvailable(Context context,String SSID, ArrayList<Wifi> wifis){
+        for (Wifi wifi: wifis) {
+            if (wifi.getSsid().equals(SSID))
+                return wifi.getPassword();
+        }
+        return null;
+    }
+    public boolean _continuteLoop = true;
+    public void checkPassWifi(Context context,String SSID, ArrayList<Wifi> wifis){
+        for (int i = 0; i < wifis.size(); i++) {
+            if (_continuteLoop){
+                //Xoa mat khau
+                WifiUtils.withContext(context).remove(SSID, new RemoveSuccessListener() {
+                    @Override
+                    public void success() {
+                        Log.i("Status Wifi","Remove success: " + SSID);
+
+                    }
+
+                    @Override
+                    public void failed(@NonNull RemoveErrorCode errorCode) {
+                        Log.i("Status Wifi","Remove failed: " + SSID);
+                    }
+                });
+                _continuteLoop = false;
+                WifiUtils.withContext(context)
+                        .connectWith(SSID, wifis.get(i).getPassword())
+                        .setTimeout(5000)
+                        .onConnectionResult(new ConnectionSuccessListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(context, "Kết nối thành công!", Toast.LENGTH_SHORT).show();
+                                flagBruceforce = false; // Dung vong lap
+                                stopCheckPassWifi();
+                                return;
+                            }
+
+                            @Override
+                            public void failed(@NonNull ConnectionErrorCode errorCode) {
+                                Toast.makeText(context, "Kết nối thất bại, đang thử lại!", Toast.LENGTH_SHORT).show();
+                                _continuteLoop = true;
+                            }
+                        })
+                        .start();
+                Log.e("Status Wifi",wifis.get(i).getPassword());
+
+            }
+        }
+
+
+    }
+
+    public void stopCheckPassWifi(){
+        flagBruceforce = false;
+    }
 
     }
 
