@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.MainActivity">
+    android:background="@color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/txt_main_tittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kết Nối Wifi"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:layout_margin="10dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Kết Nối Wifi"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/iv_main_scan"
@@ -28,11 +31,33 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="Reload"
-        app:tint="@color/blue" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="50dp"
-        android:id="@+id/rcv_main_listWifi"
+        app:tint="@color/white" />
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:background="@drawable/layput_bg_top"
         android:layout_height="match_parent"
-        android:layout_below="@+id/txt_main_tittle"/>
+        android:layout_below="@+id/txt_main_tittle"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_linear_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:indicatorColor="@color/black"
+            android:visibility="invisible"
+            android:indeterminate="true" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_main_listWifi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+
 </RelativeLayout>

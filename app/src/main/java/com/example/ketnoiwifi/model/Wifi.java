@@ -1,17 +1,25 @@
-package com.example.ketnoiwifi.utils;
+package com.example.ketnoiwifi.model;
 
 public class Wifi {
+    private int id;
     private String ssid;
     private String password;
-    private Boolean available;
 
-    public Wifi(String ssid, String password, Boolean available) {
+    public Wifi(int id,String ssid, String password) {
+        this.id = id;
         this.ssid = ssid;
         this.password = password;
-        this.available = available;
     }
 
     public Wifi() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getSsid() {
@@ -30,11 +38,4 @@ public class Wifi {
         this.password = password;
     }
 
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(Boolean available) {
-        this.available = available;
-    }
 }

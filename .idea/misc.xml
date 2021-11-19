@@ -3,7 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/drawable/layout_bg.xml" value="0.26614583333333336" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/drawable/layput_bg_top.xml" value="0.26614583333333336" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/activity_add_password.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/activity_bottom_sheet_content.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/activity_manager.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/bottom_sheet.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/item_wifi.xml" value="0.25" />
+        <entry key="..\:/Study/AndroidDev/KetNoiWifi-Dien/app/src/main/res/layout/item_wifi_manager.xml" value="0.536" />
         <entry key="app/src/main/res/drawable/layout_bg.xml" value="0.23333333333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_wifi.xml" value="0.335" />
