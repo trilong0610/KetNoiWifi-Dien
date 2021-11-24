@@ -1,6 +1,5 @@
 package com.example.ketnoiwifi.activitys;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static ConnectivityManager mConnectivityManager;
     public static WifiManager wifiManager;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private RecyclerView rcvListWifi;
     public static WifiAdapter wifiAdapter;
     public Context context;
@@ -49,16 +50,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mConnectivityManager = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        // Yêu cầu cấp quyền truy cập vị trí
         requestPermissions();
+
         mappingView();
+
         mappingActionView();
     }
 
     private void mappingView() {
-        rcvListWifi = findViewById(R.id.rcv_main_listWifi);
-        ivScan = findViewById(R.id.iv_main_scan);
-        txtTittle = findViewById(R.id.txt_main_tittle);
+        rcvListWifi = findViewById(R.id.rcv_main_listWifi); // Danh sách để hiển thị wifi
+
+        ivScan = findViewById(R.id.iv_main_scan); // Nút scan
+
+        txtTittle = findViewById(R.id.txt_main_tittle); // "Kết nối wifi"
+
         progressMain = findViewById(R.id.progress_linear_main);
+
         wifis = new ArrayList<>();
 
 //        wifis.add(new Wifi("TVNET-VNPT_5G","TVNET@12",true));
@@ -78,43 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void requestPermissions(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_WIFI_STATE}, 100);
-
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED  ){
+            requestPermissions(new String[]{
+                            android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+            return ;
         }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 101);
+    }
 
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CHANGE_WIFI_STATE}, 102);
-
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CHANGE_NETWORK_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CHANGE_NETWORK_STATE}, 104);
-
-        }
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS)
-                != PackageManager.PERMISSION_GRANTED){
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_SETTINGS}, 105);
-
-        }
-
-}
 
     private int countTap = 0; // Đủ 10 lần nhấp chuyển vào Activity Manager Password
     @Override
@@ -145,5 +125,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .show();
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    // Permission Denied
+                    Toast.makeText( this,"Vui lòng cấp quyền vị trí" , Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 }
