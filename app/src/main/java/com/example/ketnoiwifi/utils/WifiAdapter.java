@@ -54,11 +54,6 @@ public class WifiAdapter extends RecyclerView.Adapter<WifiAdapter.ViewHolder> {
                 Toast.makeText(context.getApplicationContext(), "Đang kết nối với " + wifi.getSsid(), Toast.LENGTH_SHORT).show();
                 ConnectWifi connectWifi = new ConnectWifi(context);
                        connectWifi.checkPassWifi(wifi.getSsid());
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
-////                    connectWifi.connectToWifi(wifi.getSsid(),wifi.getPassword());
-//                else
-//                    connectWifi.connectToWifi10(wifi.getSsid(),wifi.getPassword());
-////                connectWifi.connectWiFi(wifi.getSsid(),wifi.getPassword(),"WPA");
             }
         });
     }

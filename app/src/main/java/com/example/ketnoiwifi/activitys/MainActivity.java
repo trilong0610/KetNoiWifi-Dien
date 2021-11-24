@@ -22,7 +22,6 @@ import com.example.ketnoiwifi.R;
 import com.example.ketnoiwifi.model.Wifi;
 import com.example.ketnoiwifi.utils.ConnectWifi;
 import com.example.ketnoiwifi.utils.WifiAdapter;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -67,15 +66,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         progressMain = findViewById(R.id.progress_linear_main);
 
-        wifis = new ArrayList<>();
+        wifis = new ArrayList<>(); // Danh sách wifi xung quanh
 
-//        wifis.add(new Wifi("TVNET-VNPT_5G","TVNET@12",true));
-//        wifis.add(new Wifi("TVNET-VNPT_2.4G","TVNET@123",true));
-//        wifis.add(new Wifi("TVNET","TVNET@123",false));
-        context = getApplication();
+        // Gán adapter cho recycleview wifi
         wifiAdapter = new WifiAdapter(wifis,MainActivity.this);
         rcvListWifi.setAdapter(wifiAdapter);
+        // Gán layout cho recycleview wifi
         rcvListWifi.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
         connectWifi = new ConnectWifi(this);
 
     }
@@ -85,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtTittle.setOnClickListener(this::onClick);
     }
 
+    // Yêu cầu cấp quyền truy cập vị trí
     private void requestPermissions(){
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED  ){
@@ -114,15 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 countTap = 0;
             }
         }
-    }
-
-    public void showDialog(String tittle, String message){
-        new MaterialAlertDialogBuilder(MainActivity.this)
-                .setTitle("Dialog")
-                .setMessage("Lorem ipsum dolor ....")
-                .setPositiveButton("Ok", /* listener = */ null)
-                .setNegativeButton("Cancel", /* listener = */ null)
-                .show();
     }
 
     @Override

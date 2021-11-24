@@ -55,8 +55,6 @@ public class ManagerActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_ADD_PASSWORD && resultCode == RESULT_OK){
             reloadDB(this);
-            Log.e("onActivityResult","OKOK");
-            Log.e("onActivityResult", String.valueOf(passwordList.get(passwordList.size() - 1).getPassword()));
 
         }
     }

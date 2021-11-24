@@ -3,7 +3,6 @@ package com.example.ketnoiwifi.activitys;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,10 +35,10 @@ public class AddPasswordActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if (v == btnAdd){
+            // Lấy mật khẩu từ input text
             String password = txtPassword.getEditText().getText().toString().trim();
-            int sizePassword = handler.getAllPassword().size();
+            // Lưu mật khẩu vào DB
             if (password != null){
-                Log.e("sizePassword",String.valueOf(sizePassword));
             handler.addPassword(new Password(1,password));
             Toast.makeText(this,"Đã thêm mật khẩu", Toast.LENGTH_SHORT).show();
             Intent returnIntent = new Intent();

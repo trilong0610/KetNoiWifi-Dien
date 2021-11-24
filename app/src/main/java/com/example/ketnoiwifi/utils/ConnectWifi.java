@@ -1,6 +1,5 @@
 package com.example.ketnoiwifi.utils;
 
-import static com.example.ketnoiwifi.activitys.MainActivity.mConnectivityManager;
 import static com.example.ketnoiwifi.activitys.MainActivity.wifiAdapter;
 import static com.example.ketnoiwifi.activitys.MainActivity.wifiManager;
 import static com.example.ketnoiwifi.activitys.MainActivity.wifis;
@@ -9,12 +8,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiNetworkSpecifier;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -22,7 +17,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.ketnoiwifi.activitys.MainActivity;
@@ -54,91 +48,7 @@ public class ConnectWifi extends Application {
         this.flagScan = flagScan;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    public void connectToWifi10(String ssid, String password) {
-        Log.e(TAG,"connection wifi  Q");
-
-            WifiNetworkSpecifier wifiNetworkSpecifier = new WifiNetworkSpecifier.Builder()
-                    .setSsid( ssid )
-                    .setWpa2Passphrase(password)
-                    .build();
-
-            NetworkRequest networkRequest = new NetworkRequest.Builder()
-                    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-                    .setNetworkSpecifier(wifiNetworkSpecifier)
-                    .build();
-
-            networkCallback = new ConnectivityManager.NetworkCallback() {
-                @Override
-                public void onAvailable(Network network) {
-                    super.onAvailable(network);
-
-                    mConnectivityManager.bindProcessToNetwork(network);
-                    Log.e(TAG,"onAvailable");
-                }
-
-                @Override
-                public void onLosing(@NonNull Network network, int maxMsToLive) {
-                    super.onLosing(network, maxMsToLive);
-                    Log.e(TAG,"onLosing");
-                }
-
-                @Override
-                public void onLost(Network network) {
-                    super.onLost(network);
-                    Log.e(TAG, "losing active connection");
-                }
-
-                @Override
-                public void onUnavailable() {
-                    super.onUnavailable();
-                    Log.e(TAG,"onUnavailable");
-                }
-            };
-            mConnectivityManager.requestNetwork(networkRequest,networkCallback);
-
-    }
-
-    public void connectToWifi(String ssid, String password) {
-            try {
-                Log.e(TAG,"connection wifi pre Q");
-                WifiConfiguration wifiConfig = new WifiConfiguration();
-                wifiConfig.SSID = "\"" + ssid + "\"";
-                wifiConfig.preSharedKey = "\"" + password + "\"";
-                int netId = wifiManager.addNetwork(wifiConfig);
-                wifiManager.disconnect();
-                wifiManager.enableNetwork(netId, true);
-                wifiManager.reconnect();
-
-            } catch ( Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-    public void scanWifi(){ WifiUtils.withContext(context.getApplicationContext()).scanWifi(this::getScanResults).start();
-//    CODE Cũ, tự viết
-//        BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context c, Intent intent) {
-//                boolean success = intent.getBooleanExtra(
-//                        WifiManager.EXTRA_RESULTS_UPDATED, false);
-//                if (success) {
-//                    if (flagScan)
-//                        scanSuccess();
-//                } else {
-//                    // scan failure handling
-//                    scanFailure();
-//                }
-//            }
-//        };
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
-//        context.registerReceiver(wifiScanReceiver, intentFilter);
-//        boolean success = wifiManager.startScan();
-//        if (success) {
-//
-//        }
-    }
+    public void scanWifi(){ WifiUtils.withContext(context.getApplicationContext()).scanWifi(this::getScanResults).start(); }
 
     private void getScanResults(@NonNull final List<ScanResult> results)
     {
@@ -149,7 +59,10 @@ public class ConnectWifi extends Application {
         }
         Log.i(TAG, "GOT SCAN RESULTS " + results);
         Toast.makeText(context, "Đã cập nhật danh sách wifi", Toast.LENGTH_SHORT).show();
+
+        // Xóa danh sách wifi
         wifis.clear();
+        // chạy vòng lặp thêm từng wifi từ kết quả scan từ results
         for (ScanResult scanResult :
                 results) {
             wifis.add(new Wifi(0,scanResult.SSID, ""));
@@ -157,105 +70,18 @@ public class ConnectWifi extends Application {
         }
     }
 
-//    private void scanFailure() {
-//        // handle failure: new scan did NOT succeed
-//        // consider using old scan results: these are the OLD results!
-//        List<ScanResult> results = wifiManager.getScanResults();
-//        wifis.clear();
-//        for (ScanResult scanResult :
-//                results) {
-//            wifis.add(new Wifi(scanResult.SSID,"TVNET@123",false));
-//            wifiAdapter.notifyDataSetChanged();
-//        }
-//    }
-
-    public String checkSSIDAvailable(String SSID, ArrayList<Wifi> wifis){
-        for (Wifi wifi: wifis) {
-            if (wifi.getSsid().equalsIgnoreCase(SSID))
-                return wifi.getPassword();
-        }
-        return null;
-    }
-
-
     public boolean _continuteLoop = true;
     public int _count = 0;
-    public boolean flagBruceforce = true; // Đánh dấu cho phép cập nhật danh sách wifi
-//    public void checkPassWifi(String SSID, ArrayList<String> passwords){
-//        if (_count < passwords.size() && _continuteLoop){
-//            // Bat dau ket noi
-//            Toast.makeText(context.getApplicationContext(), "Đang thử mật khẩu " + _count, Toast.LENGTH_SHORT).show();
-//            //Xoa mat khau
-//            WifiUtils.withContext(context).remove(SSID, new RemoveSuccessListener() {
-//                @Override
-//                public void success() {
-//                    Log.i("Status Wifi","Remove success 1: " + SSID);
-//
-//                }
-//
-//                @Override
-//                public void failed(@NonNull RemoveErrorCode errorCode) {
-//                    Log.i("Status Wifi","Remove failed 1: " + SSID);
-//                }
-//            });
-////            Ngừng lặp
-//            _continuteLoop = false;
-//
-//            Log.e("Status Wifi","Đang thử mật khẩu " + _count);
-//
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                WifiUtils.withContext(context)
-//                        .connectWith(SSID, passwords.get(_count))
-//                        .setTimeout(15000)
-//                        .onConnectionResult(new ConnectionSuccessListener() {
-//                            @Override
-//                            public void success() {
-//                                Toast.makeText(context, "Kết nối thành công!", Toast.LENGTH_SHORT).show();
-//                                //                                    flagBruceforce = false; // Dung vong lap
-//                                return;
-//                            }
-//
-//                            @Override
-//                            public void failed(@NonNull ConnectionErrorCode errorCode) {
-//                                Toast.makeText(context, "Kết nối thất bại, đang thử lại...\n" + errorCode, Toast.LENGTH_SHORT).show();
-//                                _continuteLoop = true; // Ttiếp tục lặp dò pass
-//                                _count++;
-//                                if (_continuteLoop)
-//                                    checkPassWifi(SSID, passwords);
-//                                return;
-//                            }
-//                        })
-//                        .start();
-//            }
-//            else {
-//                try {
-//                    Log.e(TAG,"connection wifi pre Q");
-//                    WifiConfiguration wifiConfig = new WifiConfiguration();
-//                    wifiConfig.SSID = "\"" + SSID + "\"";
-//                    wifiConfig.preSharedKey = "\"" + passwords.get(_count) + "\"";
-//                    int netId = wifiManager.addNetwork(wifiConfig);
-//                    wifiManager.disconnect();
-//                    wifiManager.enableNetwork(netId, true);
-//                    wifiManager.reconnect();
-//
-//                } catch ( Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        else
-//            _count = 0;
-//    }
+
     public void checkPassWifi(String SSID){
 
         DatabaseHandler handler = new DatabaseHandler(context);
         ArrayList<Password> passwords = handler.getAllPassword();
-
-        Log.e("ConnectWifiList", String.valueOf(passwords.size()));
-            if (_count < passwords.size()){
-
+        // Kiểm tra nếu index pass hiện tại < tổng wifi thì tiếp tục dò
+         if (_count < passwords.size()){
                 // Bat dau ket noi
-                Toast.makeText(context, "Bắt đầu dò mật khẩu...", Toast.LENGTH_SHORT).show();                //Xoa mat khau
+                Toast.makeText(context, "Bắt đầu dò mật khẩu...", Toast.LENGTH_SHORT).show();
+                //Xoa mat khau đã lưu của ssid wifi cần dò pass
                 WifiUtils.withContext(context).remove(SSID, new RemoveSuccessListener() {
                     @Override
                     public void success() {
@@ -268,14 +94,15 @@ public class ConnectWifi extends Application {
                         Log.i("Status Wifi","Remove failed 1: " + SSID);
                     }
                 });
-    //            Ngừng lặp
-//                _continuteLoop = false;
+
+//                Kiểm tra version android hiện tại
+//             Android >= 10
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     MainActivity.progressMain.setVisibility(View.VISIBLE);
                     ArrayList<Password> finalPasswords = passwords;
                     WifiUtils.withContext(context)
                             .connectWith(SSID, passwords.get(_count).getPassword())
-                            .setTimeout(8000)
+                            .setTimeout(8000) // Thời gian chờ kết nối wifi
                             .onConnectionResult(new ConnectionSuccessListener() {
                                 @Override
                                 public void success() {
@@ -289,7 +116,7 @@ public class ConnectWifi extends Application {
                                 public void failed(@NonNull ConnectionErrorCode errorCode) {
                                     MainActivity.progressMain.setVisibility(View.INVISIBLE);
                                     Toast.makeText(context, "Kết nối thất bại, đang thử lại...\n" + errorCode, Toast.LENGTH_SHORT).show();
-                                    _continuteLoop = true; // Ttiếp tục lặp dò pass
+                                    _continuteLoop = true; // Tiếp tục lặp dò pass
                                     _count++;
                                     if (_continuteLoop)
                                         checkPassWifi(SSID);
@@ -298,6 +125,7 @@ public class ConnectWifi extends Application {
                             })
                             .start();
                 }
+//                Android < 10
                 else {
                     try {
                         MainActivity.progressMain.setVisibility(View.VISIBLE);
@@ -313,17 +141,20 @@ public class ConnectWifi extends Application {
                         e.printStackTrace();
                     }
                 }
-                // Sau 15s kiểm tra xem đã kết nối wifi chưa
+                // Sau 8200ms kiểm tra xem đã kết nối wifi chưa
                 // Nếu đã kết nối thì thông báo
                 // Nếu chưa thì thử mật khẩu tiếp theo
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        // Ket noi thanh cong
                         if (WifiUtils.withContext(context).isWifiConnected()){
-                            // Ket noi thanh cong
                             MainActivity.progressMain.setVisibility(View.INVISIBLE);
                             showDialog(context, "Kết nối thành công","Mật khẩu: " + passwords.get(_count).getPassword());
                         }
+//                        Kết nối thất bại
+//                        Nếu đã là mật khẩu cuối cùng => ngừng dò và thông báo
+//                        Nếu chưa là mật khẩu cuối cùng => tiếp tục dò
                         else {
                             if (_count == passwords.size() - 1){
                                 MainActivity.progressMain.setVisibility(View.INVISIBLE);
@@ -339,17 +170,12 @@ public class ConnectWifi extends Application {
                         }
 
                     }
-                },8200);
+                },8200); // Thời gian chờ kết nối wifi
             }
             else {
                 _count = 0;
             }
         }
-
-
-    public void stopCheckPassWifi(){
-        flagBruceforce = false;
-    }
 
     private void showDialog(Context c,String tittle, String message){
         AlertDialog alertDialog = new AlertDialog.Builder(c).create(); //Use context
